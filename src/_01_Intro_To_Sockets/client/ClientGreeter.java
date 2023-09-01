@@ -2,8 +2,6 @@ package _01_Intro_To_Sockets.client;
 
 import java.net.*;
 
-import com.sun.security.ntlm.Server;
-
 import java.io.*;
 
 public class ClientGreeter {
@@ -13,7 +11,7 @@ public class ClientGreeter {
 	  // If you don't know how to find a computer's ip address, ask about ifconfig on linux/mac and ipconfig on windows.
 	   
 	   
-	   String ip = "192.168.1.255";
+	   String ip = "172.31.16.159";
 	   
       //2. Create an integer for the server's port number
       
@@ -26,8 +24,9 @@ public class ClientGreeter {
 			Socket s = new Socket(ip, portNum);
 			DataOutputStream dataOut = new DataOutputStream(s.getOutputStream());
 			dataOut.writeUTF("hello");
+			
 			DataInputStream dataIn = new DataInputStream(s.getInputStream());
-			dataIn.readUTF();
+			System.out.println(dataIn.readUTF());
 			s.close();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block

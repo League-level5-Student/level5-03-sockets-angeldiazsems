@@ -12,7 +12,7 @@ public class ServerGreeter extends Thread {
 	public ServerGreeter() throws IOException {
 		//2. Initialize the ServerSocket object. In the parameters,
 		//   you must define the port at which the server will listen for connections.
-		serverSocket = new ServerSocket(0);
+		serverSocket = new ServerSocket(8080);
 		//*OPTIONAL* you can set a time limit for the server to wait by using the 
 		//  ServerSocket's setSoTimeout(int timeInMilliSeconds) method
 	}
@@ -36,8 +36,9 @@ public class ServerGreeter extends Thread {
 					Socket sock = serverSocket.accept();
 					JOptionPane.showMessageDialog(null, "Client has connected");
 					DataInputStream dataIn = new DataInputStream(sock.getInputStream());
-					dataIn.readUTF();
+					System.out.println(dataIn.readUTF());
 					DataOutputStream dataOut = new DataOutputStream(sock.getOutputStream());
+					
 					dataOut.writeUTF("hi");
 				} 
 				catch(SocketTimeoutException e) {
