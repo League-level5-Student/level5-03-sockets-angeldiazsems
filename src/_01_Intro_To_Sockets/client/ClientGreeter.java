@@ -11,7 +11,7 @@ public class ClientGreeter {
 	  // If you don't know how to find a computer's ip address, ask about ifconfig on linux/mac and ipconfig on windows.
 	   
 	   
-	   String ip = "172.31.16.159";
+	   String ip = "172.31.28.180";
 	   
       //2. Create an integer for the server's port number
       
