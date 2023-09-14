@@ -1,18 +1,14 @@
 package _02_Chat_Application;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
+import java.net.*;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
-import _01_Intro_To_Sockets.server.ServerGreeter;
+import java.io.*;
 
-
-public class ServerChat {
+public class ServerChat extends Thread {
+	//1. Create an object of the ServerSocket class
 	ServerSocket serverSocket;
 	public ServerChat() throws IOException {
 		//2. Initialize the ServerSocket object. In the parameters,
@@ -20,14 +16,17 @@ public class ServerChat {
 		serverSocket = new ServerSocket(8080);
 		//*OPTIONAL* you can set a time limit for the server to wait by using the 
 		//  ServerSocket's setSoTimeout(int timeInMilliSeconds) method
-		
 	}
 
 	public void run() {
 		//3. Create a boolean variable and initialize it to true.
 		boolean bool = true;
 		//4. Make a while loop that continues looping as long as the boolean created in the previous step is true.
-			while(bool) {
+			Scanner scan = new Scanner(System.in);
+			
+			System.out.println("While loop is STARTING. FRom server");
+
+		do {
 			//5. Make a try-catch block that checks for two types Exceptions: SocketTimeoutException and IOException.
 			//   Put steps 8 - 15 in the try block.
 		
@@ -42,13 +41,13 @@ public class ServerChat {
 					Socket sock = serverSocket.accept();
 					JOptionPane.showMessageDialog(null, "Client has connected");
 					DataInputStream dataIn = new DataInputStream(sock.getInputStream());
+					System.out.println("Client says "+dataIn.readUTF());
 					
-					String text = dataIn.readUTF();
-					_02_Chat_Application.ClientChat.serverLabel.setText(dataIn.readUTF());
-
 					DataOutputStream dataOut = new DataOutputStream(sock.getOutputStream());
-					String response = JOptionPane.showInputDialog("what do you want to say back");
-					dataOut.writeUTF(response);
+					System.out.println("What do you want to say to cilent?");
+					String serverResponse = scan.nextLine();
+					dataOut.writeUTF(serverResponse);
+					
 				} 
 				catch(SocketTimeoutException e) {
 					JOptionPane.showMessageDialog(null, "Error");
@@ -75,8 +74,10 @@ public class ServerChat {
 				
 				//15. Close the client server
 			}
+		while(!scan.nextLine().equals("quit"));
+		scan.close();
 			//6. If the program catches a SockeTimeoutException, let the user know about it and set loop's boolean variable to false.
-
+System.out.println("While loop is done. FRom server");
 			//7. If the program catches a IOException, let the user know about it and set the loop's boolean variable to false.
 
 		
@@ -85,7 +86,7 @@ public class ServerChat {
 	public static void main(String[] args) {
 		//16. In a new thread, create an object of the ServerGreeter class and start the thread. Don't forget the try-catch.
 		try {
-			Thread t = new Thread(new ServerGreeter());
+			Thread t = new Thread(new ServerChat());
 			t.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

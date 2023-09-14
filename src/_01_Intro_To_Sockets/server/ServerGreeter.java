@@ -1,6 +1,7 @@
 package _01_Intro_To_Sockets.server;
 
 import java.net.*;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
@@ -21,7 +22,11 @@ public class ServerGreeter extends Thread {
 		//3. Create a boolean variable and initialize it to true.
 		boolean bool = true;
 		//4. Make a while loop that continues looping as long as the boolean created in the previous step is true.
-			while(bool) {
+			Scanner scan = new Scanner(System.in);
+			
+			System.out.println("While loop is STARTING. FRom server");
+
+		do {
 			//5. Make a try-catch block that checks for two types Exceptions: SocketTimeoutException and IOException.
 			//   Put steps 8 - 15 in the try block.
 		
@@ -36,10 +41,13 @@ public class ServerGreeter extends Thread {
 					Socket sock = serverSocket.accept();
 					JOptionPane.showMessageDialog(null, "Client has connected");
 					DataInputStream dataIn = new DataInputStream(sock.getInputStream());
-					System.out.println(dataIn.readUTF());
-					DataOutputStream dataOut = new DataOutputStream(sock.getOutputStream());
+					System.out.println("Client says "+dataIn.readUTF());
 					
-					dataOut.writeUTF("hi");
+					DataOutputStream dataOut = new DataOutputStream(sock.getOutputStream());
+					System.out.println("What do you want to say to cilent?");
+					String serverResponse = scan.nextLine();
+					dataOut.writeUTF(serverResponse);
+					
 				} 
 				catch(SocketTimeoutException e) {
 					JOptionPane.showMessageDialog(null, "Error");
@@ -66,8 +74,10 @@ public class ServerGreeter extends Thread {
 				
 				//15. Close the client server
 			}
+		while(!scan.nextLine().equals("quit"));
+		scan.close();
 			//6. If the program catches a SockeTimeoutException, let the user know about it and set loop's boolean variable to false.
-
+System.out.println("While loop is done. FRom server");
 			//7. If the program catches a IOException, let the user know about it and set the loop's boolean variable to false.
 
 		
